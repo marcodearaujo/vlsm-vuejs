@@ -1,4 +1,9 @@
-# hello-world-2
+# VLSM vuejs
+
+## Run on docker
+```
+docker-compose up -d --build --remove-orphans
+```
 
 ## Project setup
 ```
