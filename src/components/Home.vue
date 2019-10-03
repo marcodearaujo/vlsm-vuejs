@@ -6,7 +6,7 @@
         <template v-slot:prepend>
           <b-input-group-text>Major Network</b-input-group-text>
         </template>
-        <b-form-input v-model="network" v-focus></b-form-input>
+        <b-form-input v-model="network" v-focus v-on:keyup="validateIp"></b-form-input>
 
         <template v-slot:append>
           <b-form-select v-model="selected" :options="suffixes" class="gray"></b-form-select>
@@ -45,6 +45,34 @@ export default {
     submit () {
       this.$router.push('subnetform')
       return false
+    },
+    validateIp (event) {
+      let code = event.keyCode
+
+      if ((code >= 0 && code <= 47)) {
+        return false;
+      }
+
+      let regex = RegExp(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/)
+      let tempIp = (this.network).split('.')
+      let isValid = false
+      let regexKeys = RegExp(/^([a-z0-9]+|\.)$/i)
+      let isValidKeys = regexKeys.test(event.key)
+
+      if (!isValidKeys) {
+        return
+      }
+
+      for (let i in tempIp) {
+        isValid = tempIp[i] == '' || regex.test(tempIp[i])
+      }
+
+      isValid = isValid && tempIp.length <= 4
+
+      if (!isValid) {
+        this.network = this.network.slice(0,-1)
+        return
+      }
     }
   },
   components: {
