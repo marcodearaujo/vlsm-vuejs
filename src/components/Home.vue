@@ -47,14 +47,10 @@ export default {
       return false
     },
     validateIp (event) {
-      let code = event.keyCode
-
-      if ((code >= 0 && code <= 47)) {
-        return false;
-      }
+      event.preventDefault()
 
       let regex = RegExp(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/)
-      let tempIp = (this.network).split('.')
+      let tempIp = (this.network||'').split('.')
       let isValid = false
       let regexKeys = RegExp(/^([a-z0-9]+|\.)$/i)
       let isValidKeys = regexKeys.test(event.key)
