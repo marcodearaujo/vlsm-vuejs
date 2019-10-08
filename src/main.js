@@ -4,19 +4,17 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import BootstrapVue from 'bootstrap-vue'
+import Subnet from 'vlsmcalc'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import Network from './lib/Network.js'
-import Subnet from './lib/Subnet.js'
 import Store from './lib/Store.js'
 
 Vue.use(BootstrapVue)
 
 Vue.config.productionTip = false
 
-Object.defineProperty(Vue.prototype, '$Network', { value: Network })
 Object.defineProperty(Vue.prototype, '$Subnet', { value: Subnet })
 
 Object.defineProperty(Vue.prototype, '$Store', { value: Store })

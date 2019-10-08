@@ -61,12 +61,6 @@ export default {
       let regex = RegExp(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/)
       let tempIp = (this.network||'').split('.')
       let isValid = false
-      let regexKeys = RegExp(/^([a-z0-9]+|\.)$/i)
-      let isValidKeys = regexKeys.test(event.key)
-
-      if (!isValidKeys) {
-        return
-      }
 
       for (let i in tempIp) {
         isValid = tempIp[i] == '' || regex.test(tempIp[i])
