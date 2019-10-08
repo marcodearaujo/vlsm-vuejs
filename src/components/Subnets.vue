@@ -3,12 +3,12 @@
   <b-button block variant="success" v-on:click="reset">Reset</b-button>
   <b-row align-v="center" align-h="center" v-if="isMobile">
     <b-col>
-      <div class="textStart">
+      <div class="textStart white">
         <div v-for="(subnet, index) in subnets" :key="index" class="mb-2">
           <b-card header-tag="header">
             <template v-slot:header>
                 <h5 class="mb-0">Name: {{ subnet.name }}</h5>
-                <h6 class="mb-0">Hosts: {{ subnet.size }}</h6>
+                <h6 class="mb-0">Hosts: {{ subnet.hosts }}</h6>
             </template>
             <b-list-group>
               <b-list-group-item button>Network: {{ subnet.network }}</b-list-group-item>
@@ -24,7 +24,7 @@
   </b-row>
   <template v-else>
     <div>
-      <b-table striped bordered borderless hover small foot-clone :items="subnets"></b-table>
+      <b-table striped bordered borderless hover small foot-clone dark :items="subnets"></b-table>
     </div>
   </template>
 </b-container>
@@ -80,5 +80,8 @@ export default {
 <style scoped>
 .textStart {
     text-align: start;
+}
+.white {
+  background-color: #ffffff;
 }
 </style>

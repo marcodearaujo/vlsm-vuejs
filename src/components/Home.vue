@@ -1,28 +1,37 @@
 <template>
 <b-container>
-  <b-row class="justify-content-md-center">
-    <div>
-      <b-input-group>
-        <template v-slot:prepend>
-          <b-input-group-text>Major Network</b-input-group-text>
+  <b-row align-v="center" align-h="center">
+    <b-col sm="*">
+      <b-card header-tag="header" >
+        <template v-slot:header>
+          <h6 class="mb-0">VLSM Calculator</h6>
         </template>
-        <b-form-input v-model="network" v-focus v-on:keyup="validateIp"></b-form-input>
+        <template>
+          <b-row align-v="center" align-h="center">
+            <b-input-group class="white">
+              <template v-slot:prepend>
+                <b-input-group-text>Major Network</b-input-group-text>
+              </template>
+              <b-form-input v-model="network" v-focus v-on:keyup="validateIp"></b-form-input>
 
-        <template v-slot:append>
-          <b-form-select v-model="selected" :options="suffixes" class="gray"></b-form-select>
+              <template v-slot:append>
+                <b-form-select v-model="selected" :options="suffixes" class="gray"></b-form-select>
+              </template>
+
+            </b-input-group>
+
+            <b-input-group prepend="Number of Subnets" class="mb-2">
+              <b-form-input aria-label="Number of Subnets" type="number" v-model="subnetNum"></b-form-input>
+              <b-input-group-append>
+              </b-input-group-append>
+            </b-input-group>
+          </b-row>
+          <b-row align-v="center" align-h="center">
+            <SubnetForm :majorNetwork="network" :suffix="selected" :subnets="subnetNum" />
+          </b-row>
         </template>
-
-      </b-input-group>
-
-      <b-input-group prepend="Number of Subnets" class="mb-2">
-        <b-form-input aria-label="Number of Subnets" type="number" v-model="subnetNum"></b-form-input>
-        <b-input-group-append>
-        </b-input-group-append>
-      </b-input-group>
-    </div>
-  </b-row>
-  <b-row>
-    <SubnetForm :majorNetwork="network" :suffix="selected" :subnets="subnetNum" />
+      </b-card>
+    </b-col>
   </b-row>
 </b-container>
 </template>
@@ -105,5 +114,8 @@ a {
   color: #495057;
   background-color: #e9ecef;
   border: 1px solid #ced4da;
+}
+.white {
+  background-color: #ffffff;
 }
 </style>
