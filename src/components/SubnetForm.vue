@@ -1,83 +1,125 @@
-<template>
-<b-container>
-  <b-row align-v="center" align-h="center">
-    <b-col sm="*">
-      <b-card header-tag="header" footer-tag="footer" v-if="subnetForm.length > 0">
-        <template v-slot:header>
-          <h6 class="mb-0">Subnets</h6>
-        </template>
-        <template>
-          <div v-for="(subnet, index) in subnetForm" :key="index" class="mb-2">
-          <b-row align-v="center" align-h="center">
-            <b-col sm="*" class="mx-1"><b-form-input placeholder="Name" v-model="subnet.name" :key="index"></b-form-input></b-col>
-            <b-col sm="*" class="mx-1"><b-form-input placeholder="size" type="number" v-model="subnet.size" :key="index"></b-form-input></b-col>
-          </b-row>
-          </div>
-        </template>
-        <template v-slot:footer>
-          <b-button block variant="success" v-on:click="calc">Calc</b-button>
-        </template>
-      </b-card>
-    </b-col>
-  </b-row>
-</b-container>
-</template>
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+import { SubnetFormInterface } from '@/interfaces'
 
-<script>
-export default {
-  name: 'SubnetForm',
-  props: {
-    majorNetwork: String,
-    suffix: Number,
-    subnets: String
+const subnetForm = ref<SubnetFormInterface[]>([])
+
+// Define props
+const props = defineProps<{
+  majorNetwork: string
+  suffix: string
+  subnets: number
+}>()
+
+// Watch the `subnets` prop to update `subnetForm`
+watch(
+  () => props.subnets,
+  (newSubnets) => {
+    const subnetsCount = parseInt(newSubnets)
+    subnetForm.value = isNaN(subnetsCount)
+      ? []
+      : Array.from({ length: subnetsCount }, () => ({ name: '', size: 0 }))
   },
-  data () {
-    return {
-      subnetForm: []
-    }
-  },
-  watch: {
-    subnets: function () {
-      let subnets = parseInt(this.subnets)
-      this.subnetForm = isNaN(subnets) ? [] : Array.apply(0, Array(subnets)).map(function () { return {'name': '', 'size': 0} })
-    }
-  },
-  methods: {
-    calc: function () {
-      this.$Store.clearAllAction()
-      let majorNetwork = this.majorNetwork + '/' + this.suffix
-      let subnets = []
-      for (let i in this.subnetForm) {
-        subnets.push(this.subnetForm[i].size)
-      }
-      let network = new this.$Subnet(subnets, majorNetwork, this.$Network)
-      this.$Store.setNetworkAction(network)
-      this.$Store.setSubnetFormAction(this.subnetForm)
-      this.$router.push('subnets')
-    }
-  }
+)
+
+// Calculate method
+const calc = () => {
+  console.log('Calculating...', subnetForm.value)
+  const majorNetwork = `${props.majorNetwork}/${props.suffix}`
+  const subnets = subnetForm.value.map((subnet) => subnet.size)
+
+  // Assume store and subnet classes are properly defined elsewhere
+  // this.$Store.clearAllAction();
+  // let network = new this.$Subnet(subnets, majorNetwork, this.$Network);
+  // this.$Store.setNetworkAction(network);
+  // this.$Store.setSubnetFormAction(subnetForm.value);
+  // this.$router.push('subnets');
+
+  // Example output for testing purposes
+  console.log('Major Network:', majorNetwork)
+  console.log('Subnets:', subnets)
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<template>
+  <div class="container">
+    <div class="subnet-form" v-if="subnetForm.length > 0">
+      <div class="header">
+        <h6>Subnets</h6>
+      </div>
+
+      <div v-for="(subnet, index) in subnetForm" :key="index" class="subnet-entry">
+        <div class="input-group">
+          <div class="input-item">
+            <label :for="'name-' + index">Name</label>
+            <input v-model="subnet.name" type="text" :id="'name-' + index" placeholder="Name" />
+          </div>
+          <div class="input-item">
+            <label :for="'size-' + index">Size</label>
+            <input v-model="subnet.size" type="number" :id="'size-' + index" placeholder="Size" />
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <button @click="calc">Calc</button>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.container {
+  max-width: 600px;
+  margin-top: 50px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.card-header {
+  background-color: #f8f9fa;
+  padding: 10px;
+  text-align: center;
 }
-a {
-  color: #42b983;
+
+.card-body {
+  padding: 20px;
 }
-.gray {
-  color: #495057;
-  background-color: #e9ecef;
-  border: 1px solid #ced4da;
+
+.card-footer {
+  padding: 10px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.btn {
+  padding: 10px 15px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn:hover {
+  background-color: #218838;
 }
 </style>

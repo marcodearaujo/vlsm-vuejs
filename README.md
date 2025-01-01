@@ -1,34 +1,64 @@
-# VLSM vuejs
+# vlsm-vuejs
 
-## Run on docker
-```
-docker-compose up -d --build --remove-orphans
-```
+This template should help get you started developing with Vue 3 in Vite.
 
-## Project setup
-```
-npm install
-```
+## Recommended IDE Setup
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Type Support for `.vue` Imports in TS
 
-### Run your tests
-```
-npm run test
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vite.dev/config/).
+
+## Project Setup
+
+```sh
+yarn
 ```
 
-### Lints and fixes files
-```
-npm run lint
+### Compile and Hot-Reload for Development
+
+```sh
+yarn dev
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Type-Check, Compile and Minify for Production
+
+```sh
+yarn build
+```
+
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
+yarn test:unit
+```
+
+### Run End-to-End Tests with [Playwright](https://playwright.dev)
+
+```sh
+# Install browsers for the first run
+npx playwright install
+
+# When testing on CI, must build the project first
+yarn build
+
+# Runs the end-to-end tests
+yarn test:e2e
+# Runs the tests only on Chromium
+yarn test:e2e --project=chromium
+# Runs the tests of a specific file
+yarn test:e2e tests/example.spec.ts
+# Runs the tests in debug mode
+yarn test:e2e --debug
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+yarn lint
+```
