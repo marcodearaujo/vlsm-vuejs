@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { SubnetFormInterface } from '@/interfaces'
+import type { SubnetFormInterface } from '@/interfaces'
 
 const subnetForm = ref<SubnetFormInterface[]>([])
 
@@ -15,7 +15,7 @@ const props = defineProps<{
 watch(
   () => props.subnets,
   (newSubnets) => {
-    const subnetsCount = parseInt(newSubnets)
+    const subnetsCount = newSubnets
     subnetForm.value = isNaN(subnetsCount)
       ? []
       : Array.from({ length: subnetsCount }, () => ({ name: '', size: 0 }))
@@ -45,7 +45,7 @@ const calc = () => {
   <div class="container">
     <div class="subnet-form" v-if="subnetForm.length > 0">
       <div class="header">
-        <h6>Subnets</h6>
+        <h3>Subnets</h3>
       </div>
 
       <div v-for="(subnet, index) in subnetForm" :key="index" class="subnet-entry">

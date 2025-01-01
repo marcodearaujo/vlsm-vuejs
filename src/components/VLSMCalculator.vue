@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import SubnetForm from './SubnetForm.vue'
 
 const network = ref<string>('')
@@ -8,14 +8,17 @@ const selected = ref<string>('/24')
 const suffixes = ['/24', '/25', '/26', '/27', '/28', '/29']
 
 // IP address validation method
-const validateIp = () => {
+const validateIp = (ip: string): boolean => {
   const regex =
     /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
-  if (network.value && !regex.test(network.value)) {
-    console.log('Invalid IP address format')
-    // Add error handling logic as needed
-  }
+  return regex.test(ip)
 }
+watch(network, (newValue) => {
+  if (!validateIp(newValue)) {
+    console.log('Invalid IP address format')
+    // You could show a validation message to the user here
+  }
+})
 </script>
 
 <template>
@@ -24,7 +27,7 @@ const validateIp = () => {
       <div class="col-12 col-md-6 offset-md-3">
         <div class="card">
           <div class="card-header">
-            <h6 class="mb-0">VLSM Calculator</h6>
+            <h3 class="mb-0">VLSM Calculator</h3>
           </div>
 
           <div class="card-body">
@@ -37,7 +40,8 @@ const validateIp = () => {
                   type="text"
                   class="form-control"
                   v-model="network"
-                  @keyup="validateIp"
+                  :aria-invalid="network && !validateIp(network) ? 'true' : 'false'"
+                  :class="{ 'is-invalid': network && !validateIp(network) }"
                   autofocus
                 />
                 <select v-model="selected" class="form-control">
@@ -45,6 +49,10 @@ const validateIp = () => {
                     {{ suffix }}
                   </option>
                 </select>
+              </div>
+              <!-- Validation error -->
+              <div v-if="network && !validateIp(network)" class="invalid-feedback">
+                Invalid IP address format
               </div>
             </div>
 
@@ -56,7 +64,9 @@ const validateIp = () => {
                 type="number"
                 class="form-control"
                 v-model="subnetNum"
+                :disabled="!validateIp(network)"
                 aria-label="Number of Subnets"
+                :aria-disabled="!validateIp(network)"
               />
             </div>
 
@@ -84,9 +94,14 @@ const validateIp = () => {
 }
 
 .card-header {
-  background-color: #f8f9fa;
+  background-color: #f8f9fa; /* Light background for the card header */
   padding: 10px;
   text-align: center;
+  color: #222222;
+}
+
+.card-header h6 {
+  margin: 0; /* To remove any default margin */
 }
 
 .card-body {
@@ -111,6 +126,14 @@ select {
   border-radius: 5px;
 }
 
+/* Ensuring input and select background is distinct and text is readable */
+input,
+select {
+  color: var(--input-text-color); /* Set text color */
+  background-color: var(--input-background-color); /* Set background color */
+  border: 1px solid var(--input-border-color); /* Set border color */
+}
+
 label {
   font-weight: bold;
 }
@@ -121,5 +144,15 @@ label {
 
 .mt-4 {
   margin-top: 2rem;
+}
+
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }
 </style>
